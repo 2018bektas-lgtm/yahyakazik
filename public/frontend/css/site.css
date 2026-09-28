@@ -1,0 +1,1018 @@
+/* ----------------------------------------------------------------
+    Bu dosya temaya ait degildir; projeye ozel eklemeler burada tutulur.
+    style.css'ten SONRA yuklenir, boylece tema guncellenirse bu
+    duzenlemeler kaybolmaz.
+-----------------------------------------------------------------*/
+
+/* == Ust menudeki metin logosu ==
+   Tema, sayfa basindaki (henuz kaydirilmamis) durum icin logo basligini
+   koyu renk (#14100c) tanimliyor. Bizim hero gorselimiz ve ic sayfa
+   basliklarimiz koyu oldugu icin bu renk okunmuyor; beyaza cekiyoruz.
+   Kaydirilmis (.nav-scroll) durumda tema zaten beyaz kullaniyor.          */
+.navbar .logo-wrapper .logo {
+    display: block;
+    line-height: 1.1;
+    text-decoration: none;
+}
+
+.navbar .logo-wrapper .logo h2 {
+    color: #fff;
+}
+
+/* == Alt bilgideki logo ==
+   Tema burada yalnizca <img> bekliyordu, metin logosu icin kural yoktu.   */
+.footer .footer-logo {
+    margin-bottom: 22px;
+}
+
+.footer .footer-logo h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 500;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    white-space: nowrap; /* "YAHYA KAZIK" tek satirda kalsin */
+}
+
+.footer .footer-logo h2 i {
+    color: #ac835d;
+    font-style: normal;
+}
+
+.footer .footer-logo span {
+    display: block;
+    font-family: "Jost", sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: #ac835d;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    line-height: 1.25em;
+    padding-left: 4px;
+}
+
+/* == Sayfa sonundaki iletisim seridi ==
+   Turkce formatli telefon numarasi dar sutunda ortadan bolunuyordu.        */
+.call-center .text a {
+    white-space: nowrap;
+}
+
+/* == Iletisim sayfasindaki harita ==
+   Temada harita bolumu yoktu; iframe'in tam genislikte oturmasini sagliyoruz. */
+.contact-map iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+}
+
+/* ================================================================
+   BOLUM STILLERI
+   Asagidakiler temada bulunmayan, projeye ozel eklenen bolumlerdir.
+   ================================================================ */
+
+/* == Hero: cok yavas kayan arka plan ==
+   background-size: cover korunarak yalnizca konum oynatilir; boylece
+   gorsel hicbir ekran oraninda kirpilmadan hafif bir canlilik kazanir. */
+@keyframes yavas-kaydir {
+    from { background-position: center 47%; }
+    to   { background-position: center 53%; }
+}
+
+.header.slider-fade .owl-item.active .item.bg-img {
+    animation: yavas-kaydir 16s ease-in-out infinite alternate;
+}
+
+/* == Sayac seridi == */
+.sayilar .sayi-kutu {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.sayilar .sayi {
+    font-family: 'Playfair Display', serif;
+    font-size: 54px;
+    line-height: 1;
+    color: #ac835d;
+    margin-bottom: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.sayilar .etiket {
+    font-family: "Jost", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, .72);
+}
+
+/* == Calisma sureci == */
+.surec .surec-adim {
+    position: relative;
+    padding: 0 16px;
+}
+
+.surec .numara {
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    line-height: 1;
+    color: rgba(172, 131, 93, .3);
+    margin-bottom: 14px;
+}
+
+.surec .surec-adim h5 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* adimlari birbirine baglayan ince cizgi (yan yana dizildiklerinde) */
+@media (min-width: 992px) {
+    .surec .surec-adim::after {
+        content: "";
+        position: absolute;
+        top: 24px;
+        right: -14px;
+        width: 28px;
+        height: 1px;
+        background: rgba(172, 131, 93, .38);
+    }
+
+    .surec .surec-satir > [class*="col-"]:last-child .surec-adim::after {
+        display: none;
+    }
+}
+
+/* == Ozgecmis zaman cizelgesi ==
+   Dikey cizgi bolum gorunur alana girince yukaridan asagi dolar
+   (.tamam sinifi site.js tarafindan eklenir).                        */
+.zaman-cizelgesi {
+    position: relative;
+    padding-left: 40px;
+}
+
+.zaman-cizelgesi .cizgi {
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: rgba(172, 131, 93, .2);
+}
+
+.zaman-cizelgesi .cizgi .dolgu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 0;
+    background: #ac835d;
+    transition: height 1.8s cubic-bezier(.25, .8, .35, 1);
+}
+
+.zaman-cizelgesi.tamam .cizgi .dolgu {
+    height: 100%;
+}
+
+.zaman-cizelgesi .madde {
+    position: relative;
+    padding-bottom: 40px;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .6s ease, transform .6s ease;
+}
+
+.zaman-cizelgesi .madde.gorundu {
+    opacity: 1;
+    transform: none;
+}
+
+.zaman-cizelgesi .madde:last-child {
+    padding-bottom: 0;
+}
+
+.zaman-cizelgesi .nokta {
+    position: absolute;
+    left: -35px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #ac835d;
+}
+
+.zaman-cizelgesi .donem {
+    font-family: "Jost", sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ac835d;
+    margin-bottom: 6px;
+}
+
+.zaman-cizelgesi .madde h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+/* == Ozgecmis sayfasindaki uzmanlik listesi == */
+.uzmanlik-listesi h5 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+/* == Faaliyet alani kartlarinda hafif yukselme == */
+.practice-areas .item {
+    transition: transform .35s ease;
+}
+
+.practice-areas .item:hover {
+    transform: translateY(-6px);
+}
+
+/* == Mobilde sabit ara / WhatsApp cubugu == */
+.mobil-iletisim {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .mobil-iletisim {
+        display: flex;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 999;
+        box-shadow: 0 -2px 18px rgba(0, 0, 0, .2);
+    }
+
+    .mobil-iletisim a {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 8px;
+        font-family: "Jost", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .mobil-iletisim a i {
+        margin-right: 8px;
+    }
+
+    .mobil-iletisim .ara      { background: #14100c; }
+    .mobil-iletisim .whatsapp { background: #25d366; }
+
+    /* sabit cubuk sayfa sonunu kapatmasin */
+    body { padding-bottom: 52px; }
+
+    /* yukari cik dugmesi cubugun ustune ciksin */
+    .progress-wrap { bottom: 68px; }
+}
+
+/* == Hareketi azalt tercihi ==
+   Kullanici isletim sisteminde animasyonlari kapattiysa saygi gosteriyoruz. */
+@media (prefers-reduced-motion: reduce) {
+    .header.slider-fade .owl-item.active .item.bg-img { animation: none; }
+    .zaman-cizelgesi .madde { opacity: 1; transform: none; transition: none; }
+    .zaman-cizelgesi .cizgi .dolgu { transition: none; }
+    .practice-areas .item { transition: none; }
+}
+
+/* == Tanitim bolumundeki yil rozeti ==
+   Tema bu kutuyu iki haneli bir sayi (orn. "20") icin kurgulamis; biz
+   kurulus yilini (4 hane) gosterdigimiz icin punto kucultulup arkadaki
+   daire yeniden ortalaniyor. Aksi halde sayi kirpiliyor.               */
+.about .year-box .number {
+    font-size: 52px;
+    line-height: 62px;
+}
+
+.about .year-box .number-bg {
+    top: -44px;
+}
+
+/* ================================================================
+   MOBIL MENU
+   Tema, 991px altinda Bootstrap collapse ile 450px yuksekliginde
+   sikisik bir kutu aciyor ve "Ucretsiz on gorusme" dugmesini
+   gizliyordu. Onun yerine tam ekran bir panel kullaniyoruz.
+   Panelin acik/kapali durumu site.js icindeki .show sinifi ile yonetilir.
+   ================================================================ */
+
+/* -- Hamburger dugmesi (acikken carpiya doner) -- */
+.menu-dugmesi {
+    position: relative;
+    z-index: 1060;
+    padding: 10px;
+    border: 0;
+    background: transparent;
+}
+
+.menu-dugmesi .cizgiler {
+    display: block;
+    position: relative;
+    width: 26px;
+    height: 18px;
+}
+
+.menu-dugmesi .cizgiler span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform .3s ease, opacity .2s ease;
+}
+
+.menu-dugmesi .cizgiler span:nth-child(1) { top: 0; }
+.menu-dugmesi .cizgiler span:nth-child(2) { top: 8px; }
+.menu-dugmesi .cizgiler span:nth-child(3) { top: 16px; }
+
+body.menu-acik .menu-dugmesi .cizgiler span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+body.menu-acik .menu-dugmesi .cizgiler span:nth-child(2) { opacity: 0; }
+body.menu-acik .menu-dugmesi .cizgiler span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+@media (max-width: 991px) {
+
+    /* logo ve dugme panelin ustunde kalsin */
+    .navbar { z-index: 1050; }
+
+    body.menu-acik { overflow: hidden; }
+    body.menu-acik .navbar { background: #14100c; }
+
+    /* -- Panel --
+       Bootstrap'in ".collapse:not(.show){display:none}" kurali gecis
+       animasyonunu engelledigi icin eziliyor; gorunurlugu opacity ve
+       visibility ile yonetiyoruz.                                       */
+    .navbar .ana-menu {
+        display: block !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1040;
+        height: 100% !important;
+        max-height: none !important;
+        padding: 112px 28px 40px !important;
+        background: #14100c;
+        text-align: left;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity .35s ease, transform .35s ease, visibility .35s;
+    }
+
+    .navbar .ana-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+    }
+
+    /* -- Menu maddeleri: buyuk serif, sirayla belirir -- */
+    .navbar .ana-menu .navbar-nav {
+        display: block;
+        margin: 0 !important;
+    }
+
+    .navbar .ana-menu .nav-item {
+        border-bottom: 1px solid rgba(172, 131, 93, .18);
+    }
+
+    .navbar .ana-menu .nav-link {
+        font-family: 'Playfair Display', serif;
+        font-size: 25px;
+        line-height: 1.3;
+        padding: 17px 0 !important;
+        margin: 0 !important;
+        color: #fff !important;
+        opacity: 0;
+        transform: translateY(14px);
+        transition: opacity .4s ease, transform .4s ease, color .2s ease;
+    }
+
+    .navbar .ana-menu.show .nav-link {
+        opacity: 1;
+        transform: none;
+    }
+
+    .navbar .ana-menu.show .nav-item:nth-child(1) .nav-link { transition-delay: .10s; }
+    .navbar .ana-menu.show .nav-item:nth-child(2) .nav-link { transition-delay: .15s; }
+    .navbar .ana-menu.show .nav-item:nth-child(3) .nav-link { transition-delay: .20s; }
+    .navbar .ana-menu.show .nav-item:nth-child(4) .nav-link { transition-delay: .25s; }
+    .navbar .ana-menu.show .nav-item:nth-child(5) .nav-link { transition-delay: .30s; }
+    .navbar .ana-menu.show .nav-item:nth-child(6) .nav-link { transition-delay: .35s; }
+
+    .navbar .ana-menu .nav-link.active { color: #ac835d !important; }
+
+    /* -- Tema bu dugmeyi mobilde gizliyordu; geri getiriyoruz -- */
+    .navbar .ana-menu .navbar-right {
+        display: block !important;
+        margin-top: 32px;
+    }
+
+    .navbar .ana-menu .navbar-right .button { text-align: center; }
+    .navbar .ana-menu .navbar-right .button a { display: block; }
+
+    /* -- Panel altindaki iletisim bilgileri -- */
+    .menu-iletisim {
+        margin-top: 34px;
+        padding-top: 26px;
+        border-top: 1px solid rgba(172, 131, 93, .2);
+        font-family: "Jost", sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .menu-iletisim a,
+    .menu-iletisim p {
+        display: block;
+        margin: 0 0 10px;
+        color: rgba(255, 255, 255, .8);
+        text-decoration: none;
+    }
+
+    .menu-iletisim a:hover { color: #ac835d; }
+
+    .menu-iletisim i {
+        width: 22px;
+        color: #ac835d;
+    }
+
+    .menu-iletisim .adres {
+        color: rgba(255, 255, 255, .55);
+        font-size: 14px;
+    }
+}
+
+/* Masaustunde panele ozel alanlar gizli kalir */
+@media (min-width: 992px) {
+    .menu-iletisim { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ana-menu,
+    .ana-menu .nav-link,
+    .menu-dugmesi .cizgiler span { transition: none; }
+}
+
+/* ================================================================
+   HERO (tek ve sabit acilis)
+   Tema donen bir slider kullaniyordu; yerini tek bir hero aldi.
+   ================================================================ */
+.hero-tek {
+    position: relative;
+    min-height: 100vh;
+    /* Elimizdeki mimari kare 1100px genislikte; tam ekranda detay degil
+       atmosfer tasimasi icin hafif sicak bir ton veriliyor. Fazla koyu
+       olmamali, yoksa gorsel tamamen kayboluyor.                       */
+    background-color: #6d5946;
+    background-blend-mode: multiply;
+}
+
+.hero-tek .container { position: relative; z-index: 2; }
+
+.hero-tek h5 {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 22px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: 400;
+    color: #fff;
+    letter-spacing: .3px;
+}
+
+.hero-tek h5 .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-right: 14px;
+    border-radius: 50%;
+    background: #ac835d;
+    font-size: 19px;
+    font-style: normal;
+}
+
+.hero-baslik {
+    margin: 0 0 22px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: clamp(38px, 6.2vw, 78px);
+    line-height: 1.12;
+    color: #fff;
+}
+
+.hero-baslik .hero-satir { display: block; }
+.hero-baslik .vurgu { color: #ac835d; font-style: italic; }
+
+.hero-aciklama {
+    max-width: 620px;
+    margin: 0 auto 34px;
+    font-family: "Jost", sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, .78);
+}
+
+.hero-butonlar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+}
+
+/* Ikincil dugme: cerceveli, bakir vurgulu */
+.button-hero-ikincil {
+    display: inline-block;
+    padding: 15px 34px;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 30px;
+    font-family: "Jost", sans-serif;
+    font-size: 15px;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color .3s ease, border-color .3s ease, color .3s ease;
+}
+
+.button-hero-ikincil:hover {
+    background: #ac835d;
+    border-color: #ac835d;
+    color: #fff;
+}
+
+/* -- Basligin satir satir yukari gelmesi -- */
+@keyframes hero-gir {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.hero-satir {
+    opacity: 0;
+    animation: hero-gir .9s cubic-bezier(.22, .61, .36, 1) forwards;
+    animation-delay: calc(var(--sira, 1) * 130ms + 250ms);
+}
+
+/* -- Asagi kaydirma isareti -- */
+.hero-kaydir {
+    position: absolute;
+    left: 50%;
+    bottom: 42px;
+    z-index: 2;
+    display: block;
+    width: 22px;
+    height: 46px;
+    margin-left: -11px;
+    border: 1px solid rgba(255, 255, 255, .4);
+    border-radius: 12px;
+}
+
+.hero-kaydir .cizgi {
+    position: absolute;
+    left: 50%;
+    top: 9px;
+    width: 2px;
+    height: 8px;
+    margin-left: -1px;
+    border-radius: 2px;
+    background: #ac835d;
+    animation: hero-kaydir-nokta 1.9s ease-in-out infinite;
+}
+
+@keyframes hero-kaydir-nokta {
+    0%, 100% { transform: translateY(0);    opacity: 1; }
+    70%      { transform: translateY(18px); opacity: 0; }
+}
+
+/* -- Ic sayfa basliklari ve sayfa sonu seridi ayni goruntu dilini kullansin -- */
+.banner-header.bg-img,
+.call .background.bg-img {
+    background-color: #6d5946;
+    background-blend-mode: multiply;
+}
+
+/* ================================================================
+   MENU BAGLANTI VURGUSU (masaustu)
+   ================================================================ */
+@media (min-width: 992px) {
+    .navbar .navbar-nav .nav-link {
+        position: relative;
+    }
+
+    .navbar .navbar-nav .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 2px;
+        width: 100%;
+        height: 1px;
+        background: #ac835d;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform .32s cubic-bezier(.22, .61, .36, 1);
+    }
+
+    .navbar .navbar-nav .nav-link:hover::after,
+    .navbar .navbar-nav .nav-link.active::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-satir { opacity: 1; animation: none; }
+    .hero-kaydir .cizgi { animation: none; }
+    .navbar .navbar-nav .nav-link::after { transition: none; }
+}
+
+/* -- Hero tipografisi: tema .header h1/h5 kurallarini ezmek icin
+      ozgulluk .hero-tek uzerinden yukseltiliyor. -- */
+.hero-tek .hero-baslik {
+    font-size: clamp(42px, 6.4vw, 86px);
+    line-height: 1.1;
+    letter-spacing: -.5px;
+}
+
+.hero-tek .hero-baslik .hero-satir {
+    color: #fff;
+    font-style: normal;
+}
+
+.hero-tek .hero-baslik .vurgu {
+    color: #ac835d;
+    font-style: italic;
+}
+
+.hero-tek .hero-aciklama {
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.hero-tek .button-3,
+.hero-tek .button-hero-ikincil {
+    font-size: 16px;
+    padding: 17px 38px;
+}
+
+@media (max-width: 767px) {
+    .hero-tek h5 { font-size: 17px; }
+    .hero-tek h5 .icon { width: 36px; height: 36px; font-size: 16px; margin-right: 11px; }
+    .hero-tek .hero-aciklama { font-size: 16px; }
+    .hero-tek .hero-butonlar { flex-direction: column; align-items: stretch; }
+    .hero-tek .button-3,
+    .hero-tek .button-hero-ikincil { text-align: center; }
+    .hero-kaydir { display: none; }
+}
+
+/* Aciklama satirlarinin dengeli bolunmesi (tek kelime alta dusmesin) */
+.hero-tek .hero-aciklama {
+    max-width: 700px;
+    color: rgba(255, 255, 255, .86);
+    text-wrap: balance;
+}
+
+/* ================================================================
+   MAKALE KARTI EDITORYAL KAPAK
+   Tema ile gelen stok fotograflar yazi konulariyla uyusmadigi icin
+   (orn. "ise iade" yazisinda oyuncak ayili cocuk) fotograf yerine
+   konuya uygun ikonlu kapak kullaniliyor. config/icerik.php icinde
+   ilgili yaziya 'gorsel' verildiginde otomatik fotografa doner.
+   ================================================================ */
+.yazi-kapak {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+    background:
+        radial-gradient(circle at 30% 25%, rgba(172, 131, 93, .22), transparent 60%),
+        linear-gradient(135deg, #1d1712 0%, #2e241c 100%);
+    overflow: hidden;
+}
+
+/* koseden gecen ince bakir cizgiler */
+.yazi-kapak::after {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(172, 131, 93, .22);
+    pointer-events: none;
+}
+
+.yazi-kapak > i {
+    font-size: 62px;
+    line-height: 1;
+    color: #ac835d;
+    opacity: .95;
+    transition: transform .45s cubic-bezier(.22, .61, .36, 1);
+}
+
+.item:hover .yazi-kapak > i {
+    transform: translateY(-4px) scale(1.06);
+}
+
+/* Tarih ve yazar alt alta degil, yan yana ve sakin dursun */
+.blog .item .cont .author h5 + h5 {
+    color: #ac835d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .yazi-kapak > i { transition: none; }
+}
+
+/* Tema kategori rozetini opacity:0 ile gizleyip yalnizca hover'da
+   gosteriyor. Ikonlu kapakta kategori tek metin etiketi oldugu icin
+   surekli gorunur olmali. Konumlandirmasi temadan gelir, dokunulmuyor. */
+.yazi-kapak .cat {
+    z-index: 2;
+    opacity: 1;
+}
+
+/* ================================================================
+   FAALIYET ALANLARI — LISTE
+   Onceki halde ayni 9 alan sayfada iki kez listeleniyordu: once
+   aciklamasiz ikon kartlari (ozetler title niteliginde gizliydi),
+   sonra ayni 9 alan tik listesi olarak. Tek ve dolu bir izgara ile
+   degistirildi.
+   ================================================================ */
+.alanlar-giris {
+    font-family: "Jost", sans-serif;
+    font-size: 17px;
+    line-height: 1.85;
+    color: #6b6763;
+}
+
+.mb-50 { margin-bottom: 50px; }
+
+.alan-kart {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-bottom: 30px;
+    padding: 38px 34px 32px;
+    background: #fbf9f7;
+    border: 1px solid #ece5dd;
+    border-radius: 4px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform .4s cubic-bezier(.22,.61,.36,1),
+                border-color .4s ease, box-shadow .4s ease;
+}
+
+.alan-kart:hover {
+    transform: translateY(-8px);
+    border-color: #ac835d;
+    box-shadow: 0 18px 40px rgba(20, 16, 12, .1);
+}
+
+.alan-kart .ikon {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 62px;
+    height: 62px;
+    margin-bottom: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ece5dd;
+    font-size: 30px;
+    color: #ac835d;
+    transition: background-color .4s ease, color .4s ease, border-color .4s ease;
+}
+
+.alan-kart:hover .ikon {
+    background: #ac835d;
+    border-color: #ac835d;
+    color: #fff;
+}
+
+.alan-kart h3 {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 12px;
+    font-family: 'Playfair Display', serif;
+    font-size: 23px;
+    line-height: 1.3;
+    color: #14100c;
+}
+
+.alan-kart p {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    margin-bottom: 20px;
+    font-family: "Jost", sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #78736e;
+}
+
+.alan-kart .devam {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    font-family: "Jost", sans-serif;
+    font-size: 14px;
+    letter-spacing: .5px;
+    color: #ac835d;
+}
+
+.alan-kart .devam i {
+    margin-left: 9px;
+    transition: transform .35s cubic-bezier(.22,.61,.36,1);
+}
+
+.alan-kart:hover .devam i { transform: translateX(6px); }
+
+/* arka plandaki soluk filigran ikon */
+.alan-kart .fon {
+    position: absolute;
+    right: -18px;
+    bottom: -26px;
+    z-index: 0;
+    font-size: 132px;
+    line-height: 1;
+    color: #14100c;
+    opacity: .035;
+    transition: transform .5s cubic-bezier(.22,.61,.36,1), opacity .5s ease;
+}
+
+.alan-kart:hover .fon { transform: scale(1.08) rotate(-6deg); opacity: .06; }
+
+/* ================================================================
+   FAALIYET ALANI — DETAY
+   ================================================================ */
+.alan-detay .alt-baslik {
+    margin: 48px 0 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 27px;
+    color: #14100c;
+}
+
+.alan-detay .durum-listesi { margin-bottom: 6px; }
+
+@media (min-width: 768px) {
+    .alan-detay .durum-listesi {
+        column-count: 2;
+        column-gap: 36px;
+    }
+    .alan-detay .durum-listesi li { break-inside: avoid; }
+}
+
+/* -- Alana ozel surec adimlari -- */
+.alan-surec .adim {
+    display: flex;
+    gap: 22px;
+    padding: 22px 0;
+    border-bottom: 1px solid #ece5dd;
+}
+
+.alan-surec .adim:last-child { border-bottom: 0; }
+
+.alan-surec .numara {
+    flex: 0 0 auto;
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    line-height: 1;
+    color: rgba(172, 131, 93, .45);
+}
+
+.alan-surec .govde h4 {
+    margin-bottom: 8px;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #14100c;
+}
+
+.alan-surec .govde p { margin: 0; }
+
+/* -- Ilgili yazi kutusu -- */
+.ilgili-makale {
+    margin-top: 48px;
+    padding: 28px 30px;
+    background: #fbf9f7;
+    border-left: 3px solid #ac835d;
+    border-radius: 3px;
+}
+
+.ilgili-makale .etiket {
+    display: block;
+    margin-bottom: 8px;
+    font-family: "Jost", sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ac835d;
+}
+
+.ilgili-makale h4 {
+    margin-bottom: 8px;
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+}
+
+.ilgili-makale h4 a { color: #14100c; text-decoration: none; }
+.ilgili-makale h4 a:hover { color: #ac835d; }
+.ilgili-makale p { margin: 0; font-size: 15px; }
+
+/* -- Yan sutun -- */
+.yan-sutun { padding-left: 10px; }
+
+@media (min-width: 992px) {
+    .yan-sutun { position: sticky; top: 110px; }
+}
+
+.yan-sutun .kutu {
+    margin-bottom: 26px;
+    padding: 28px 26px;
+    border-radius: 4px;
+}
+
+.yan-sutun .kutu h4 {
+    margin-bottom: 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+}
+
+.alanlar-kutusu {
+    background: #fbf9f7;
+    border: 1px solid #ece5dd;
+}
+
+.alanlar-kutusu ul { margin: 0; padding: 0; list-style: none; }
+
+.alanlar-kutusu li + li { border-top: 1px solid #ece5dd; }
+
+.alanlar-kutusu a {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    font-family: "Jost", sans-serif;
+    font-size: 15px;
+    color: #4a4540;
+    text-decoration: none;
+    transition: color .25s ease, padding-left .25s ease;
+}
+
+.alanlar-kutusu a i {
+    margin-right: 12px;
+    font-size: 19px;
+    color: #ac835d;
+}
+
+.alanlar-kutusu a:hover { color: #ac835d; padding-left: 6px; }
+
+.iletisim-kutusu {
+    background: #14100c;
+    color: rgba(255, 255, 255, .78);
+}
+
+.iletisim-kutusu h4 { color: #fff; }
+
+.iletisim-kutusu p {
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, .7);
+}
+
+.iletisim-kutusu .telefon {
+    display: block;
+    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.iletisim-kutusu .telefon i { margin-right: 10px; font-size: 16px; color: #ac835d; }
+.iletisim-kutusu .telefon:hover { color: #ac835d; }
+
+@media (max-width: 991px) {
+    .yan-sutun { padding-left: 0; margin-top: 50px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .alan-kart, .alan-kart .ikon, .alan-kart .fon,
+    .alan-kart .devam i, .alanlar-kutusu a { transition: none; }
+}

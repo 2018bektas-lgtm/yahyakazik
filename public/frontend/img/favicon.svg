@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Av. Yahya Kazık Hukuk Bürosu">
+    <rect width="64" height="64" rx="12" fill="#14100c"/>
+    <g fill="#ac835d">
+        <!-- alınlık -->
+        <path d="M32 8 53 17.5 11 17.5Z"/>
+        <!-- başlık kirişi -->
+        <rect x="13" y="20.5" width="38" height="4.5" rx="1"/>
+        <!-- sütunlar -->
+        <rect x="18.5" y="27.5" width="5" height="16" rx="1"/>
+        <rect x="29.5" y="27.5" width="5" height="16" rx="1"/>
+        <rect x="40.5" y="27.5" width="5" height="16" rx="1"/>
+        <!-- taban -->
+        <rect x="13" y="46" width="38" height="4.5" rx="1"/>
+        <rect x="10" y="52.5" width="44" height="3.5" rx="1.5"/>
+    </g>
+</svg>
