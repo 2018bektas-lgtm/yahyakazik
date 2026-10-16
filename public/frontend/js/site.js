@@ -165,11 +165,54 @@
         });
     }
 
+    /* -------------------------------------------- 5. Giris kutusu */
+    /*  Ust menudeki kisi simgesi kucuk bir giris kutusu acar
+        (partials/giris-kutusu.blade.php). Disariya tiklaninca ya da Esc
+        ile kapanir. Hatali giristen donulduyse kutu acik gelir; mobilde
+        once menu paneli acilir.                                           */
+    function girisKutusunuBaslat() {
+        var kutu = document.getElementById('girisKutusu');
+        var dugme = document.getElementById('girisDugmesi');
+        if (!kutu || !dugme) return;
+
+        function durum(acik) {
+            kutu.classList.toggle('acik', acik);
+            dugme.setAttribute('aria-expanded', acik ? 'true' : 'false');
+            if (acik) {
+                var alan = kutu.querySelector('input[type=email]:not([value]), input[type=email][value=""], input[type=password]');
+                if (alan) setTimeout(function () { alan.focus(); }, 50);
+            }
+        }
+
+        dugme.addEventListener('click', function (olay) {
+            olay.stopPropagation();
+            durum(!kutu.classList.contains('acik'));
+        });
+
+        document.addEventListener('click', function (olay) {
+            if (kutu.classList.contains('acik') && !kutu.contains(olay.target)) durum(false);
+        });
+
+        document.addEventListener('keydown', function (olay) {
+            if (olay.key === 'Escape' && kutu.classList.contains('acik')) {
+                durum(false);
+                dugme.focus();
+            }
+        });
+
+        if (kutu.classList.contains('acik')) {
+            var menuDugmesi = document.getElementById('menuDugmesi');
+            if (window.innerWidth <= 991 && menuDugmesi) menuDugmesi.click();
+            durum(true);
+        }
+    }
+
     function baslat() {
         sayaclariBaslat();
         cizelgeyiBaslat();
         kademeliGirisiBaslat();
         mobilMenuyuBaslat();
+        girisKutusunuBaslat();
     }
 
     if (document.readyState === 'loading') {

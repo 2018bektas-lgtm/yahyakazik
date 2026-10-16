@@ -11,7 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Giriş yapmamış kullanıcılar yönetim girişine, giriş yapmışlar panele yönlenir
+        $middleware->redirectGuestsTo(fn () => route('yonetim.giris'));
+        $middleware->redirectUsersTo(fn () => route('yonetim.panel'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
