@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('baslik', 'Hakkımızda')
-@section('aciklama', 'Otorite Hukuk ve Danışmanlık Bürosu ve kurucusu Av. Yahya Kazık: kamu deneyimi, akademik birikim, çalışma ilkeleri ve süreç.')
+@section('aciklama', 'Otorite Hukuk ve Danışmanlık Bürosu, kurucusu Av. Yahya Kazık ve avukat ekibi: deneyim, uzmanlık alanları, çalışma ilkeleri ve süreç.')
 
 @section('icerik')
 
@@ -14,10 +14,10 @@
     {{-- Büro tanıtımı --}}
     @include('sections.tanitim')
 
-    {{-- Kurucu avukat: özet, koyu tanıtım şeridi ve özgeçmiş --}}
-    @include('sections.avukat-ozeti')
+    {{-- Kurucu avukat (koyu şerit) ve tüm ekip; her avukatın ayrıntılı
+         özgeçmişi kendi profil sayfasındadır (/ekibimiz/{slug}) --}}
     @include('sections.kurucu')
-    @include('sections.ozgecmis')
+    @include('sections.ekip', ['ekip' => $ekip])
 
     {{-- Çalışma biçimi --}}
     @include('sections.ilkeler')

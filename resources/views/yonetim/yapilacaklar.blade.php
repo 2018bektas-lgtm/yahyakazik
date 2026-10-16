@@ -54,16 +54,20 @@
                         @foreach ($liste as $kalem)
                             @include('yonetim.partials.yapilacak', ['kalem' => $kalem])
                         @endforeach
-                        <a href="{{ route('yonetim.yapilacaklar', ['tarih' => $gun->toDateString(), 'saat' => $saatMetni]) }}#gorevEkle"
-                           class="dilime-ekle" data-saat="{{ $saatMetni }}" aria-label="{{ $saatMetni }} için görev ekle">
+                        @if ($eklenebilir && ($simdiSaat === null || $saat >= $simdiSaat))
+                        @php $dilimSaati = $enErkenSaat !== null && $saat === $simdiSaat ? $enErkenSaat : $saatMetni; @endphp
+                        <a href="{{ route('yonetim.yapilacaklar', ['tarih' => $gun->toDateString(), 'saat' => $dilimSaati]) }}#gorevEkle"
+                           class="dilime-ekle" data-saat="{{ $dilimSaati }}" aria-label="{{ $saatMetni }} için görev ekle">
                             <i class="fa-regular fa-plus"></i> <span>Görev ekle</span>
                         </a>
+                        @endif
                     </div>
                 </div>
             @endforeach
         </section>
 
         <aside class="yan">
+            @if ($eklenebilir)
             <form method="post" action="{{ route('yonetim.gorevler.store') }}" class="kart cam form" id="gorevEkle">
                 @csrf
                 <header><h2>Görev ekle</h2></header>
@@ -72,11 +76,16 @@
                 <input type="text" id="gorevBaslik" name="baslik" value="{{ old('baslik') }}" required maxlength="255"
                        placeholder="Örn. Bilirkişi raporuna itiraz yaz">
                 <label for="gorevSaat" class="ust-bosluk">Saat <small class="soluk">(boş bırakırsan gün boyu)</small></label>
-                <input type="time" id="gorevSaat" name="saat" step="1800" value="{{ old('saat', request('saat')) }}">
+                <input type="time" id="gorevSaat" name="saat" value="{{ old('saat', request('saat')) }}" @if ($enErkenSaat) min="{{ $enErkenSaat }}" @endif>
                 <label for="gorevAciklama" class="ust-bosluk">Not <small class="soluk">(isteğe bağlı)</small></label>
                 <textarea id="gorevAciklama" name="aciklama" rows="3" maxlength="2000">{{ old('aciklama') }}</textarea>
                 <footer><button type="submit" class="dugme dugme-birincil genis"><i class="fa-solid fa-plus"></i> Listeye ekle</button></footer>
             </form>
+            @else
+            <div class="kart cam kucuk soluk aciklama-kart">
+                <p><i class="fa-regular fa-clock-rotate-left"></i> Geçmiş bir gün; bu güne yeni görev eklenemez.</p>
+            </div>
+            @endif
 
             <div class="kart cam kucuk soluk aciklama-kart">
                 <p><i class="fa-regular fa-circle-info"></i> Saati geçen randevular kendiliğinden <b>Tamamlandı</b> olur. Yanlışlıkla işaretlenirse onay kutusuna tekrar tıklayarak geri alabilirsin.</p>
@@ -89,7 +98,9 @@
         document.querySelectorAll('.dilime-ekle').forEach(function (a) {
             a.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.getElementById('gorevSaat').value = a.dataset.saat;
+                var saat = document.getElementById('gorevSaat');
+                if (!saat) return;
+                saat.value = a.dataset.saat;
                 var baslik = document.getElementById('gorevBaslik');
                 baslik.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 baslik.focus({ preventScroll: true });

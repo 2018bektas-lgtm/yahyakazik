@@ -11,7 +11,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Site ayarları istek boyunca bir kez okunsun
+        $this->app->singleton(\App\Support\SiteAyarlari::class);
     }
 
     /**
@@ -19,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Panelden değiştirilen büro bilgileri config('site') değerlerinin yerine geçer
+        $this->app->make(\App\Support\SiteAyarlari::class)->siteBilgileriniUygula();
     }
 }

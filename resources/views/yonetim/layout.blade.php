@@ -12,6 +12,7 @@
         ['yonetim.randevular.index', 'yonetim.randevular.*', 'fa-calendar-check', 'Randevular', $bekleyenSayisi ?: null],
         ['yonetim.yapilacaklar', 'yonetim.yapilacaklar', 'fa-list-check', 'Yapılacaklar', null],
         ['yonetim.takvim', 'yonetim.takvim*', 'fa-calendar-days', 'Takvim', null],
+        ['yonetim.avukatlar.index', 'yonetim.avukatlar.*', 'fa-user-tie', 'Avukatlar', null],
     ];
 @endphp
 <!DOCTYPE html>
@@ -34,31 +35,48 @@
     <div class="arkaplan" aria-hidden="true"><span></span><span></span><span></span></div>
 
     <div class="kabuk">
-        <aside class="kenar cam">
+        <aside class="kenar cam" aria-label="Yönetim menüsü">
             <a href="{{ route('yonetim.panel') }}" class="marka">
                 <span class="marka-ikon"><i class="fa-solid fa-scale-balanced"></i></span>
-                <span><b>{{ config('site.kisa_unvan') }}</b><small>Yönetim</small></span>
+                <span class="yazi"><b>{{ config('site.kisa_unvan') }}</b><small>Yönetim</small></span>
             </a>
 
             <nav class="menu">
                 @foreach ($menu as [$rota, $desen, $ikon, $etiket, $rozet])
-                    <a href="{{ route($rota) }}" class="{{ request()->routeIs($desen) ? 'aktif' : '' }}">
-                        <i class="fa-regular {{ $ikon }}"></i><span>{{ $etiket }}</span>
+                    <a href="{{ route($rota) }}" class="{{ request()->routeIs($desen) ? 'aktif' : '' }}" title="{{ $etiket }}">
+                        <i class="fa-regular {{ $ikon }}"></i><span class="yazi">{{ $etiket }}</span>
                         @if ($rozet)<em class="rozet">{{ $rozet }}</em>@endif
                     </a>
                 @endforeach
+
+                {{-- Ayarlar: menü açılınca alt sayfaları görünür --}}
+                @php $ayarlarAktif = request()->routeIs('yonetim.ayarlar', 'yonetim.seo'); @endphp
+                <div class="menu-grup {{ $ayarlarAktif ? 'acik' : '' }}">
+                    <a href="{{ route('yonetim.ayarlar') }}" class="{{ $ayarlarAktif ? 'aktif' : '' }}" title="Ayarlar">
+                        <i class="fa-regular fa-gear"></i><span class="yazi">Ayarlar</span>
+                        <i class="fa-regular fa-chevron-down ok yazi" aria-hidden="true"></i>
+                    </a>
+                    <div class="alt-menu"><div>
+                        <a href="{{ route('yonetim.ayarlar') }}" class="{{ request()->routeIs('yonetim.ayarlar') ? 'secili' : '' }}">
+                            <i class="fa-regular fa-building-columns"></i><span class="yazi">Site ayarları</span>
+                        </a>
+                        <a href="{{ route('yonetim.seo') }}" class="{{ request()->routeIs('yonetim.seo') ? 'secili' : '' }}">
+                            <i class="fa-regular fa-magnifying-glass-chart"></i><span class="yazi">SEO</span>
+                        </a>
+                    </div></div>
+                </div>
             </nav>
 
             <div class="hizli">
-                <a href="{{ route('yonetim.randevular.create') }}" class="dugme dugme-birincil"><i class="fa-solid fa-plus"></i> Randevu</a>
-                <a href="{{ route('yonetim.etkinlikler.create') }}" class="dugme"><i class="fa-solid fa-plus"></i> Takvim kaydı</a>
+                <a href="{{ route('yonetim.randevular.create') }}" class="dugme dugme-birincil" title="Yeni randevu"><i class="fa-solid fa-plus"></i><span class="yazi">Randevu</span></a>
+                <a href="{{ route('yonetim.etkinlikler.create') }}" class="dugme" title="Yeni takvim kaydı"><i class="fa-regular fa-calendar-plus"></i><span class="yazi">Takvim kaydı</span></a>
             </div>
 
             <div class="kenar-alt">
-                <a href="{{ route('home') }}" target="_blank" rel="noopener"><i class="fa-regular fa-arrow-up-right-from-square"></i> Siteyi aç</a>
+                <a href="{{ route('home') }}" target="_blank" rel="noopener" title="Siteyi aç"><i class="fa-regular fa-arrow-up-right-from-square"></i><span class="yazi">Siteyi aç</span></a>
                 <form method="post" action="{{ route('yonetim.cikis') }}">
                     @csrf
-                    <button type="submit"><i class="fa-regular fa-arrow-right-from-bracket"></i> Çıkış <small>{{ auth()->user()->name }}</small></button>
+                    <button type="submit" title="Çıkış"><i class="fa-regular fa-arrow-right-from-bracket"></i><span class="yazi">Çıkış</span><small class="yazi">{{ auth()->user()->name }}</small></button>
                 </form>
             </div>
         </aside>
