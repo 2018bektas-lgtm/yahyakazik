@@ -1,0 +1,117 @@
+/* Başvuru ve randevu sihirbazı (pages/basvuru.blade.php) */
+
+.basvuru { background: #f7f6f4; }
+
+.sihirbaz {
+    background: #fff;
+    border: 1px solid #e5dbd2;
+    padding: 45px 50px 35px;
+    position: relative;
+}
+@media (max-width: 767px) { .sihirbaz { padding: 30px 20px 25px; } }
+
+.sihirbaz .ilerleme { height: 3px; background: #efe8e1; margin: -45px -50px 35px; }
+.sihirbaz .ilerleme span { display: block; height: 100%; width: 0; background: #ac835d; transition: width .35s ease; }
+@media (max-width: 767px) { .sihirbaz .ilerleme { margin: -30px -20px 25px; } }
+.sihirbaz:not(.js) .ilerleme { display: none; }
+
+.sihirbaz .gizli-alan { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.sihirbaz .adim { border: 0; padding: 0; margin: 0 0 40px; min-width: 0; }
+.sihirbaz.js .adim { display: none; margin-bottom: 10px; }
+.sihirbaz.js .adim.aktif { display: block; animation: adimGir .35s ease; }
+@keyframes adimGir { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.sihirbaz legend {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px; line-height: 1.25; color: #14100c;
+    margin-bottom: 12px; float: none; width: 100%;
+}
+.sihirbaz legend small {
+    display: block; font-family: 'Jost', sans-serif; font-size: 13px;
+    letter-spacing: 2px; text-transform: uppercase; color: #ac835d; margin-bottom: 6px;
+}
+.sihirbaz .ipucu { color: #817f7c; font-size: 15px; margin-bottom: 20px; }
+
+.sihirbaz label { color: #14100c; font-size: 15px; margin-bottom: 6px; display: block; }
+.sihirbaz input[type=text], .sihirbaz input[type=tel], .sihirbaz input[type=email],
+.sihirbaz select, .sihirbaz textarea {
+    width: 100%; border: 1px solid #e5dbd2; background: #fdfcfb; color: #14100c;
+    padding: 13px 16px; font-size: 16px; margin-bottom: 18px; border-radius: 0;
+    transition: border-color .2s;
+}
+.sihirbaz input:focus, .sihirbaz select:focus, .sihirbaz textarea:focus { outline: 0; border-color: #ac835d; }
+.sihirbaz .sayac { text-align: right; color: #817f7c; font-size: 13px; margin-top: -12px; }
+
+/* Seçenek kartları ve çipler */
+.secenekler input { position: absolute; opacity: 0; pointer-events: none; }
+.secenekler.iki { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 767px) { .secenekler.iki { grid-template-columns: 1fr; } }
+
+.kart-secenek span {
+    display: block; height: 100%; cursor: pointer; padding: 28px 24px;
+    border: 1px solid #e5dbd2; background: #fdfcfb; transition: all .2s;
+}
+.kart-secenek i { font-size: 30px; color: #ac835d; display: block; margin-bottom: 14px; }
+.kart-secenek strong { display: block; font-size: 19px; color: #14100c; font-weight: 500; margin-bottom: 6px; }
+.kart-secenek em { font-style: normal; color: #817f7c; font-size: 15px; line-height: 1.5; display: block; }
+.kart-secenek span:hover { border-color: #ac835d; }
+.kart-secenek input:checked + span { border-color: #ac835d; background: #faf5f0; box-shadow: inset 0 0 0 1px #ac835d; }
+.kart-secenek input:focus-visible + span { outline: 2px solid #ac835d; outline-offset: 2px; }
+
+.secenekler.cipler { display: flex; flex-wrap: wrap; gap: 10px; }
+.cip span, .saat span {
+    display: inline-block; cursor: pointer; padding: 10px 18px; border: 1px solid #e5dbd2;
+    background: #fdfcfb; color: #14100c; font-size: 15px; transition: all .2s;
+}
+.cip span:hover, .saat span:hover { border-color: #ac835d; }
+.cip input:checked + span, .saat input:checked + span { background: #ac835d; border-color: #ac835d; color: #fff; }
+.cip input:focus-visible + span, .saat input:focus-visible + span, .gun input:focus-visible + span { outline: 2px solid #ac835d; outline-offset: 2px; }
+
+/* Gün ve saat seçimi */
+.gunler { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 18px; scroll-snap-type: x mandatory; }
+.gun { margin: 0 !important; flex: 0 0 auto; scroll-snap-align: start; }
+.gun input, .saat input { position: absolute; opacity: 0; pointer-events: none; }
+.gun span {
+    display: flex; flex-direction: column; align-items: center; width: 68px; padding: 10px 0;
+    border: 1px solid #e5dbd2; background: #fdfcfb; cursor: pointer; transition: all .2s;
+}
+.gun small { font-size: 12px; color: #817f7c; text-transform: uppercase; letter-spacing: 1px; }
+.gun b { font-size: 24px; font-weight: 500; color: #14100c; line-height: 1.2; }
+.gun span:hover { border-color: #ac835d; }
+.gun input:checked + span { background: #14100c; border-color: #14100c; }
+.gun input:checked + span b, .gun input:checked + span small { color: #fff; }
+
+.saatler { display: flex; flex-wrap: wrap; gap: 10px; min-height: 48px; margin-bottom: 15px; }
+.saat { margin: 0 !important; }
+.saat span { min-width: 78px; text-align: center; }
+
+.sihirbaz .temizle { background: none; border: 0; color: #ac835d; text-decoration: underline; padding: 0; font-size: 15px; }
+
+.sihirbaz .onay { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #817f7c; cursor: pointer; }
+.sihirbaz .onay input { margin-top: 4px; accent-color: #ac835d; }
+
+.sihirbaz .ozet { background: #faf5f0; border-left: 3px solid #ac835d; padding: 15px 18px; margin-top: 20px; }
+.sihirbaz .ozet p { margin: 0 0 4px; font-size: 15px; color: #14100c; }
+
+.sihirbaz .adim-hata, .sihirbaz .uyari { color: #a33a2b; font-size: 15px; margin-top: 10px; }
+.sihirbaz .uyari { background: #fbeeec; border-left: 3px solid #a33a2b; padding: 14px 18px; margin: 0 0 25px; }
+.sihirbaz .uyari ul { margin: 6px 0 0; padding-left: 18px; }
+
+.sihirbaz-alt { display: flex; align-items: center; gap: 15px; margin-top: 30px; border-top: 1px solid #efe8e1; padding-top: 25px; }
+.sihirbaz-alt .geri { background: none; border: 0; color: #817f7c; font-size: 16px; padding: 0; }
+.sihirbaz-alt .geri:hover { color: #14100c; }
+.sihirbaz-alt .ileri, .sihirbaz-alt .gonder { margin-left: auto; }
+.sihirbaz:not(.js) .ileri, .sihirbaz:not(.js) .geri { display: none; }
+.sihirbaz [hidden] { display: none !important; }
+
+.basvuru .alt-not { text-align: center; margin-top: 25px; color: #817f7c; }
+.basvuru .alt-not a { color: #ac835d; }
+
+.sihirbaz.tamam { text-align: center; }
+.tamam-ikon {
+    width: 72px; height: 72px; border-radius: 50%; background: #ac835d; color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 20px;
+}
+.sihirbaz.tamam h3 { font-family: 'Playfair Display', serif; font-size: 30px; margin-bottom: 15px; }
+.sihirbaz.tamam .button-4 { margin-top: 15px; display: inline-block; }

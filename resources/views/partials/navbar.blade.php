@@ -47,7 +47,8 @@
             </ul>
 
             <div class="navbar-right">
-                <div class="button"><a href="{{ route('iletisim') }}">Ücretsiz ön görüşme</a></div>
+                @include('partials.giris-kutusu')
+                <div class="button"><a href="{{ route('basvuru') }}">Başvuru / Randevu</a></div>
             </div>
 
             {{-- Yalnızca mobil panelde görünür --}}

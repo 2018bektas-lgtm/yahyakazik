@@ -40,7 +40,7 @@ return [
                          arabuluculuk ve hukuki danışmanlık.',
         'gorsel'     => 'frontend/img/case/6.jpg',
         'butonlar'   => [
-            ['metin' => 'Randevu oluşturun',   'rota' => 'iletisim',          'birincil' => true],
+            ['metin' => 'Randevu oluşturun',   'rota' => 'basvuru',           'birincil' => true],
             ['metin' => 'Faaliyet alanlarımız','rota' => 'faaliyet-alanlari', 'birincil' => false],
         ],
     ],
@@ -91,15 +91,15 @@ return [
 
     /* Faaliyet alanları */
     'faaliyet_alanlari' => [
-        ['ikon' => 'flaticon-suitcase',   'slug' => 'is-hukuku', 'ad' => 'İş Hukuku',          'ozet' => 'İşe iade, kıdem ve ihbar tazminatı, fazla mesai alacakları, iş kazası ve hizmet tespiti davaları.'],
-        ['ikon' => 'flaticon-wounded',    'slug' => 'tazminat-hukuku', 'ad' => 'Tazminat Hukuku',    'ozet' => 'Trafik kazası, iş kazası ve haksız fiilden doğan maddi ve manevi tazminat talepleri.'],
-        ['ikon' => 'flaticon-parents',    'slug' => 'aile-hukuku', 'ad' => 'Aile Hukuku',        'ozet' => 'Anlaşmalı ve çekişmeli boşanma, velayet, nafaka ve mal rejiminin tasfiyesi.'],
-        ['ikon' => 'flaticon-thief',      'slug' => 'ceza-hukuku', 'ad' => 'Ceza Hukuku',        'ozet' => 'Soruşturma ve kovuşturma aşamalarında şüpheli, sanık ve mağdur vekilliği.'],
-        ['ikon' => 'flaticon-standard',   'slug' => 'asker-alma-hukuku', 'ad' => 'Asker Alma Hukuku',  'ozet' => 'Askerlik yoklaması, erteleme, muafiyet ve bedelli askerlik işlemlerine ilişkin uyuşmazlıklar.'],
-        ['ikon' => 'flaticon-courthouse', 'slug' => 'memur-hukuku', 'ad' => 'Memur Hukuku',       'ozet' => 'Disiplin soruşturmaları, atama ve görevden uzaklaştırma işlemleri, özlük hakları davaları.'],
-        ['ikon' => 'flaticon-support',    'slug' => 'saglik-hukuku', 'ad' => 'Sağlık Hukuku',      'ozet' => 'Malpraktis iddiaları, hasta hakları ve sağlık personelinin hukuki sorumluluğu.'],
-        ['ikon' => 'flaticon-coin',       'slug' => 'ticaret-hukuku', 'ad' => 'Ticaret Hukuku',     'ozet' => 'Şirket kuruluşu ve devri, ticari sözleşmeler, alacak takibi ve şirketler arası uyuşmazlıklar.'],
-        ['ikon' => 'flaticon-mace',       'slug' => 'arabuluculuk', 'ad' => 'Arabuluculuk',       'ozet' => 'Dava şartı ve ihtiyari arabuluculuk süreçlerinde tarafsız arabulucu olarak görev.'],
+        ['ikon' => 'flaticon-suitcase',   'slug' => 'is-hukuku', 'dava' => 'İş davaları', 'ad' => 'İş Hukuku',          'ozet' => 'İşe iade, kıdem ve ihbar tazminatı, fazla mesai alacakları, iş kazası ve hizmet tespiti davaları.'],
+        ['ikon' => 'flaticon-wounded',    'slug' => 'tazminat-hukuku', 'dava' => 'Tazminat davaları', 'ad' => 'Tazminat Hukuku',    'ozet' => 'Trafik kazası, iş kazası ve haksız fiilden doğan maddi ve manevi tazminat talepleri.'],
+        ['ikon' => 'flaticon-parents',    'slug' => 'aile-hukuku', 'dava' => 'Boşanma davaları', 'ad' => 'Aile Hukuku',        'ozet' => 'Anlaşmalı ve çekişmeli boşanma, velayet, nafaka ve mal rejiminin tasfiyesi.'],
+        ['ikon' => 'flaticon-thief',      'slug' => 'ceza-hukuku', 'dava' => 'Ceza davaları', 'ad' => 'Ceza Hukuku',        'ozet' => 'Soruşturma ve kovuşturma aşamalarında şüpheli, sanık ve mağdur vekilliği.'],
+        ['ikon' => 'flaticon-standard',   'slug' => 'asker-alma-hukuku', 'dava' => 'Askerlik davaları', 'ad' => 'Asker Alma Hukuku',  'ozet' => 'Askerlik yoklaması, erteleme, muafiyet ve bedelli askerlik işlemlerine ilişkin uyuşmazlıklar.'],
+        ['ikon' => 'flaticon-courthouse', 'slug' => 'memur-hukuku', 'dava' => 'Memur davaları', 'ad' => 'Memur Hukuku',       'ozet' => 'Disiplin soruşturmaları, atama ve görevden uzaklaştırma işlemleri, özlük hakları davaları.'],
+        ['ikon' => 'flaticon-support',    'slug' => 'saglik-hukuku', 'dava' => 'Malpraktis davaları', 'ad' => 'Sağlık Hukuku',      'ozet' => 'Malpraktis iddiaları, hasta hakları ve sağlık personelinin hukuki sorumluluğu.'],
+        ['ikon' => 'flaticon-coin',       'slug' => 'ticaret-hukuku', 'dava' => 'Ticari davalar', 'ad' => 'Ticaret Hukuku',     'ozet' => 'Şirket kuruluşu ve devri, ticari sözleşmeler, alacak takibi ve şirketler arası uyuşmazlıklar.'],
+        ['ikon' => 'flaticon-mace',       'slug' => 'arabuluculuk', 'dava' => 'Arabuluculuk', 'ad' => 'Arabuluculuk',       'ozet' => 'Dava şartı ve ihtiyari arabuluculuk süreçlerinde tarafsız arabulucu olarak görev.'],
     ],
 
     /* Çalışma süreci — anasayfadaki dört adımlı bölüm */

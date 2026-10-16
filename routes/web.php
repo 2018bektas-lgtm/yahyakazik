@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\BasvuruController;
 use App\Http\Controllers\SayfaController;
+use App\Http\Controllers\Yonetim;
+use App\Http\Middleware\GecmisRandevulariTamamla;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,3 +31,53 @@ Route::get('/makaleler/{slug}', [SayfaController::class, 'yazi'])->name('yazi');
 | paylaşılmış bağlantılar ve arama motorları için kalıcı olarak yönlendirilir.
 */
 Route::permanentRedirect('/av-yahya-kazik', '/hakkimizda');
+
+/*
+|--------------------------------------------------------------------------
+| Müvekkil Başvurusu ve Randevu
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/basvuru', [BasvuruController::class, 'goster'])->name('basvuru');
+Route::get('/basvuru/saatler', [BasvuruController::class, 'saatler'])->name('basvuru.saatler');
+Route::post('/basvuru', [BasvuruController::class, 'kaydet'])->middleware('throttle:6,1')->name('basvuru.kaydet');
+Route::get('/basvuru/tamam', [BasvuruController::class, 'tamam'])->name('basvuru.tamam');
+Route::post('/iletisim', [BasvuruController::class, 'mesaj'])->middleware('throttle:6,1')->name('iletisim.mesaj');
+
+/*
+|--------------------------------------------------------------------------
+| Yönetim Paneli
+|--------------------------------------------------------------------------
+| Hesap açmak için: php artisan yonetici:olustur
+*/
+
+Route::prefix('yonetim')->name('yonetim.')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('/giris', [Yonetim\GirisController::class, 'goster'])->name('giris');
+        Route::post('/giris', [Yonetim\GirisController::class, 'giris']);
+    });
+
+    Route::middleware(['auth', GecmisRandevulariTamamla::class])->group(function () {
+        Route::post('/cikis', [Yonetim\GirisController::class, 'cikis'])->name('cikis');
+        Route::get('/', Yonetim\PanelController::class)->name('panel');
+
+        Route::patch('/randevular/{randevu}/durum', [Yonetim\RandevuController::class, 'durum'])->name('randevular.durum');
+        Route::resource('randevular', Yonetim\RandevuController::class)
+            ->except('show')->parameters(['randevular' => 'randevu']);
+
+        Route::get('/yapilacaklar', [Yonetim\YapilacaklarController::class, 'index'])->name('yapilacaklar');
+        Route::post('/gorevler', [Yonetim\YapilacaklarController::class, 'store'])->name('gorevler.store');
+        Route::post('/gorevler/{gorev}/alt', [Yonetim\YapilacaklarController::class, 'altGorevEkle'])->name('gorevler.alt');
+        Route::patch('/gorevler/{gorev}/tamamla', [Yonetim\YapilacaklarController::class, 'tamamla'])->name('gorevler.tamamla');
+        Route::delete('/gorevler/{gorev}', [Yonetim\YapilacaklarController::class, 'destroy'])->name('gorevler.destroy');
+        Route::patch('/randevular/{randevu}/tamamla', [Yonetim\YapilacaklarController::class, 'randevuTamamla'])->name('randevular.tamamla');
+
+        Route::get('/takvim', [Yonetim\TakvimController::class, 'index'])->name('takvim');
+        Route::get('/takvim/veriler', [Yonetim\TakvimController::class, 'veriler'])->name('takvim.veriler');
+        Route::patch('/takvim/tasi', [Yonetim\TakvimController::class, 'tasi'])->name('takvim.tasi');
+
+        Route::patch('/etkinlikler/{etkinlik}/tamamla', [Yonetim\EtkinlikController::class, 'tamamla'])->name('etkinlikler.tamamla');
+        Route::resource('etkinlikler', Yonetim\EtkinlikController::class)
+            ->except(['index', 'show'])->parameters(['etkinlikler' => 'etkinlik']);
+    });
+});

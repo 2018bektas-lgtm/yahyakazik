@@ -55,32 +55,39 @@
                 </div>
 
                 <div class="col-md-5 offset-md-1">
-                    {{--
-                        Form şu an yalnızca görseldir; herhangi bir adrese gönderim yapmaz.
-                        Çalışır hâle getirmek için bir POST rotası + doğrulama + Mail gönderimi
-                        eklenmeli ve aşağıdaki action alanı o rotaya yönlendirilmelidir.
-                    --}}
+                    {{-- Mesajlar yönetim panelindeki Randevular listesine "Mesaj" olarak düşer. --}}
                     <div class="contact-form">
-                        <form action="#" method="post">
+                        <form action="{{ route('iletisim.mesaj') }}" method="post">
+                            @csrf
+                            <div style="position:absolute;left:-9999px" aria-hidden="true">
+                                <input type="text" name="web_sitesi" tabindex="-1" autocomplete="off">
+                            </div>
                             <h3>Bize yazın <span>size dönelim!</span></h3>
+                            @if (session('mesaj_gonderildi'))
+                                <p class="alert alert-success">Mesajınız bize ulaştı, en kısa sürede dönüş yapacağız.</p>
+                            @endif
+                            @if ($errors->any())
+                                <p class="alert alert-danger">{{ $errors->first() }}</p>
+                            @endif
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="ad" class="visually-hidden">Ad Soyad</label>
-                                    <input type="text" name="ad" id="ad" placeholder="Ad Soyad" required>
+                                    <input type="text" name="ad" id="ad" value="{{ old('ad') }}" placeholder="Ad Soyad" required>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="eposta" class="visually-hidden">E-posta</label>
-                                    <input type="email" name="eposta" id="eposta" placeholder="E-posta Adresiniz" required>
+                                    <input type="email" name="eposta" id="eposta" value="{{ old('eposta') }}" placeholder="E-posta Adresiniz" required>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="telefon" class="visually-hidden">Telefon</label>
-                                    <input type="tel" name="telefon" id="telefon" placeholder="Telefon Numaranız">
+                                    <input type="tel" name="telefon" id="telefon" value="{{ old('telefon') }}" placeholder="Telefon Numaranız">
                                 </div>
                                 <div class="col-md-12">
                                     <label for="mesaj" class="visually-hidden">Mesajınız</label>
-                                    <textarea name="mesaj" id="mesaj" cols="40" rows="4" placeholder="Mesajınız" required></textarea>
+                                    <textarea name="mesaj" id="mesaj" cols="40" rows="4" placeholder="Mesajınız" required>{{ old('mesaj') }}</textarea>
                                 </div>
                                 <div class="col-md-12">
+                                    <p style="font-size:14px">Randevu almak ya da durumunuzu adım adım anlatmak için <a href="{{ route('basvuru') }}">başvuru sayfasını</a> kullanabilirsiniz.</p>
                                     <button type="submit" class="button-3"><span>Mesajı Gönder</span></button>
                                 </div>
                             </div>
