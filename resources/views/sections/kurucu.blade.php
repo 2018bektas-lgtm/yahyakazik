@@ -43,7 +43,9 @@
                     </div>
                 </div>
 
-                <a href="{{ route('hakkimizda') }}#ozgecmis" class="button-2 mt-30">
+                {{-- Profil sayfası avukatlar tablosundan gelir; kayıt yoksa (migrate öncesi) Hakkımızda'ya gider --}}
+                @php $kurucuProfil = \App\Models\Avukat::ekip()->first(); @endphp
+                <a href="{{ $kurucuProfil ? route('avukat', $kurucuProfil) : route('hakkimizda') }}" class="button-2 mt-30">
                     Özgeçmişi görün<span></span>
                 </a>
             </div>

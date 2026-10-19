@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Avukat;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -21,7 +22,18 @@ class SayfaController extends Controller
 
     public function hakkimizda(): View
     {
-        return view('pages.hakkimizda');
+        return view('pages.hakkimizda', ['ekip' => Avukat::ekip()]);
+    }
+
+    /** Avukat profili; yayından kaldırılmış avukatın sayfası açılmaz. */
+    public function avukat(Avukat $avukat): View
+    {
+        abort_unless($avukat->yayinda, 404);
+
+        return view('pages.avukat', [
+            'avukat'    => $avukat,
+            'digerleri' => Avukat::ekip()->reject(fn (Avukat $a) => $a->is($avukat))->values(),
+        ]);
     }
 
     public function faaliyetAlanlari(): View

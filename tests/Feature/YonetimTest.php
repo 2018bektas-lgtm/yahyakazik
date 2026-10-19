@@ -61,7 +61,14 @@ class YonetimTest extends TestCase
         $etkinlik = Etkinlik::create(['baslik' => 'İşe iade duruşması', 'tur' => 'durusma', 'baslangic' => '2026-10-22 10:00']);
 
         $this->actingAs($this->yonetici);
-        $this->get('/yonetim')->assertOk()->assertSee('Ayşe Yılmaz')->assertSee('İşe iade duruşması');
+        $this->get('/yonetim')->assertOk()->assertSee('Ayşe Yılmaz')->assertSee('İşe iade duruşması')->assertSee('Bugün yapılacaklar')
+            ->assertSee('Duruşma ve randevular')
+            ->assertSee('"hafta":{"etiket":"Bu hafta","randevu":1,"durusma":1}', false);
+
+        // Panelden hızlı görev eklenince panelde kalınır ve görev listede görünür
+        $this->from('/yonetim')->post('/yonetim/gorevler', ['baslik' => 'Harç makbuzunu tara', 'tarih' => '2026-10-19'])
+            ->assertRedirect('/yonetim');
+        $this->get('/yonetim')->assertSeeInOrder(['Bugün yapılacaklar', 'Harç makbuzunu tara', 'Ayşe Yılmaz']);
         $this->get('/yonetim/randevular')->assertOk()->assertSee('Ayşe Yılmaz');
         $this->get('/yonetim/randevular?durum=iptal')->assertOk()->assertDontSee('05321112233');
         $this->get("/yonetim/randevular/{$randevu->id}/edit")->assertOk();
@@ -146,6 +153,26 @@ class YonetimTest extends TestCase
 
         $this->delete("/yonetim/gorevler/{$gorev->id}");
         $this->assertSame(1, Gorev::count());
+    }
+
+    public function test_gecmis_saate_ve_gecmis_gune_gorev_eklenmez(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2026-10-19 11:20', 'Europe/Istanbul'));
+        $this->actingAs($this->yonetici);
+
+        $this->post('/yonetim/gorevler', ['baslik' => 'Geç kaldım', 'tarih' => '2026-10-19', 'saat' => '10:30'])
+            ->assertSessionHasErrors(['saat' => 'Geçmiş bir saate görev eklenemez. Şu an saat 11:20.']);
+        $this->post('/yonetim/gorevler', ['baslik' => 'Dün', 'tarih' => '2026-10-18'])
+            ->assertSessionHasErrors(['saat' => 'Geçmiş bir güne görev eklenemez.']);
+        $this->assertSame(0, Gorev::count());
+
+        // Bugün saatsiz ve şu anki dakikaya görev eklenebilir
+        $this->post('/yonetim/gorevler', ['baslik' => 'Gün boyu', 'tarih' => '2026-10-19'])->assertSessionHasNoErrors();
+        $this->post('/yonetim/gorevler', ['baslik' => 'Şimdi', 'tarih' => '2026-10-19', 'saat' => '11:20'])->assertSessionHasNoErrors();
+        $this->assertSame(2, Gorev::count());
+
+        $this->get('/yonetim/yapilacaklar')->assertSee('min="11:20"', false)->assertDontSee('saat=10%3A00');
+        $this->get('/yonetim/yapilacaklar?tarih=2026-10-18')->assertSee('bu güne yeni görev eklenemez')->assertDontSee('id="gorevEkle"', false);
     }
 
     public function test_saati_gecen_randevu_kendiliginden_tamamlanir(): void

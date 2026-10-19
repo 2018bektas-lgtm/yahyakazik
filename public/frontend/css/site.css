@@ -1304,3 +1304,162 @@ body.menu-acik .menu-dugmesi .cizgiler span:nth-child(3) {
     .dava-konulari { padding: 24px 16px 18px; }
     .dava-konulari ul { grid-template-columns: 1fr; }
 }
+
+/* ----------------------------------------------------------------
+   Ekibimiz ve avukat profilleri
+   Fotoğrafı olmayan avukatta baş harfler (monogram) gösterilir.
+-----------------------------------------------------------------*/
+.ekip { background: #fbf9f7; }
+.ekip-izgara { row-gap: 0; }
+
+.avukat-karti,
+.ekibe-katil {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #ece5dd;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.avukat-karti:hover { transform: translateY(-6px); box-shadow: 0 22px 50px rgba(20, 16, 12, .1); }
+
+.avukat-gorsel {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 4.2;
+    overflow: hidden;
+    background: linear-gradient(150deg, #2a211a 0%, #14100c 70%);
+}
+
+.avukat-gorsel img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.avukat-karti:hover .avukat-gorsel img { transform: scale(1.04); }
+
+.monogram {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 84px;
+    letter-spacing: 4px;
+    color: #d9ae84;
+}
+
+.monogram::after {
+    content: "";
+    position: absolute;
+    width: 62%;
+    aspect-ratio: 1;
+    border: 1px solid rgba(217, 174, 132, .35);
+    border-radius: 50%;
+}
+
+.avukat-govde { flex: 1; display: flex; flex-direction: column; padding: 26px 26px 24px; }
+
+.avukat-unvan {
+    display: block;
+    margin-bottom: 6px;
+    font-family: "Jost", sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ac835d;
+}
+
+.avukat-govde h4 { margin-bottom: 4px; font-family: 'Playfair Display', serif; font-size: 23px; }
+.avukat-govde h4 a { color: #14100c; text-decoration: none; }
+.avukat-govde h4 a:hover { color: #ac835d; }
+.avukat-baro { display: block; margin-bottom: 12px; font-size: 14px; color: #817f7c; }
+.avukat-baro i { margin-right: 4px; color: #ac835d; }
+.avukat-govde p { margin-bottom: 16px; font-size: 15px; line-height: 1.65; }
+
+.avukat-alanlar { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; padding: 0; list-style: none; }
+.avukat-alanlar li { padding: 4px 11px; border: 1px solid #ece5dd; border-radius: 20px; font-size: 13px; color: #6d5946; background: #fbf9f7; }
+
+.avukat-bag {
+    margin-top: auto;
+    font-family: "Jost", sans-serif;
+    font-size: 15px;
+    color: #14100c;
+    text-decoration: none;
+}
+
+.avukat-bag i { margin-left: 6px; color: #ac835d; transition: transform .25s ease; }
+.avukat-bag:hover { color: #ac835d; }
+.avukat-bag:hover i { transform: translateX(4px); }
+
+/* Son kart: kariyer çağrısı */
+.ekibe-katil {
+    justify-content: center;
+    padding: 36px 30px;
+    background: #14100c;
+    border-color: #14100c;
+    color: rgba(255, 255, 255, .72);
+}
+
+.ekibe-katil > i { font-size: 44px; color: #d9ae84; margin-bottom: 18px; }
+.ekibe-katil h4 { color: #fff; font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px; }
+.ekibe-katil p { color: rgba(255, 255, 255, .72); font-size: 15px; }
+.ekibe-katil .avukat-bag { margin-top: 10px; color: #d9ae84; word-break: break-all; }
+.ekibe-katil .avukat-bag:hover { color: #fff; }
+
+/* Profil sayfası */
+.profil-kart { border: 1px solid #ece5dd; border-radius: 6px; overflow: hidden; background: #fff; }
+
+@media (min-width: 992px) {
+    .profil-kart { position: sticky; top: 110px; }
+}
+
+.profil-kart .avukat-gorsel { aspect-ratio: 4 / 4.4; }
+.profil-govde { padding: 26px 26px 28px; }
+.profil-govde h3 { margin-bottom: 4px; font-family: 'Playfair Display', serif; font-size: 26px; color: #14100c; }
+
+.profil-iletisim { margin: 18px 0 22px; padding: 16px 0 0; list-style: none; border-top: 1px solid #ece5dd; }
+.profil-iletisim li { display: flex; align-items: center; gap: 12px; padding: 6px 0; font-size: 15px; }
+.profil-iletisim i { width: 18px; text-align: center; color: #ac835d; }
+.profil-iletisim a { color: #4a4540; text-decoration: none; word-break: break-all; }
+.profil-iletisim a:hover { color: #ac835d; }
+
+.profil-buton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 20px;
+    border-radius: 30px;
+    background: #14100c;
+    color: #fff;
+    font-family: "Jost", sans-serif;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background .3s ease;
+}
+
+.profil-buton:hover { background: #ac835d; color: #fff; }
+
+.profil-alanlar h5 { margin-bottom: 14px; font-family: 'Playfair Display', serif; font-size: 21px; }
+.profil-alanlar ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.profil-alanlar li > * {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px;
+    border: 1px solid #ece5dd;
+    border-radius: 4px;
+    background: #fbf9f7;
+    font-size: 15px;
+    color: #4a4540;
+    text-decoration: none;
+}
+
+.profil-alanlar a i { color: #ac835d; transition: transform .25s ease; }
+.profil-alanlar a:hover { border-color: #ac835d; color: #ac835d; }
+.profil-alanlar a:hover i { transform: translateX(4px); }
+
+@media (max-width: 575px) {
+    .profil-alanlar ul { grid-template-columns: 1fr; }
+    .monogram { font-size: 64px; }
+}

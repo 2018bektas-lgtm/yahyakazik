@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Yonetim;
 
 use App\Http\Controllers\Controller;
-use App\Models\Etkinlik;
 use App\Models\Gorev;
 use App\Models\Randevu;
+use App\Support\GunlukYapilacaklar;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 /**
@@ -18,16 +18,15 @@ use Illuminate\View\View;
  */
 class YapilacaklarController extends Controller
 {
+    public function __construct(private GunlukYapilacaklar $yapilacaklar) {}
+
     public function index(Request $istek): View
     {
         $gun = $istek->filled('tarih') && strtotime($istek->tarih)
             ? Carbon::parse($istek->tarih)->startOfDay()
             : Carbon::today();
 
-        $kalemler = $this->randevular($gun)
-            ->concat($this->etkinlikler($gun))
-            ->concat($this->gorevler($gun))
-            ->sortBy(fn ($k) => ($k['saat'] ?? '').'|'.$k['sira']);
+        $kalemler = $this->yapilacaklar->kalemler($gun);
 
         [$saatli, $gunBoyu] = $kalemler->partition(fn ($k) => $k['saat'] !== null);
 
@@ -48,6 +47,9 @@ class YapilacaklarController extends Controller
             'toplam'   => $kalemler->count(),
             'biten'    => $kalemler->where('tamam', true)->count(),
             'simdiSaat' => $gun->isToday() ? Carbon::now()->hour : null,
+            // Geçmiş günlere görev eklenmez; bugün için en erken şu anki dakika
+            'eklenebilir' => ! $gun->isPast() || $gun->isToday(),
+            'enErkenSaat' => $gun->isToday() ? Carbon::now()->format('H:i') : null,
         ]);
     }
 
@@ -60,7 +62,21 @@ class YapilacaklarController extends Controller
             'aciklama' => ['nullable', 'string', 'max:2000'],
         ], ['baslik.required' => 'Görevin ne olduğunu yazın.']);
 
+        // Geçmiş bir güne ya da bugünün geçmiş bir saatine görev yazılmaz
+        $simdi = Carbon::now();
+        $zaman = Carbon::parse($veri['tarih'].' '.($veri['saat'] ?? '23:59'));
+        if ($zaman->lt($simdi->copy()->startOfMinute())) {
+            throw ValidationException::withMessages(['saat' => $veri['tarih'] < $simdi->toDateString()
+                ? 'Geçmiş bir güne görev eklenemez.'
+                : 'Geçmiş bir saate görev eklenemez. Şu an saat '.$simdi->format('H:i').'.']);
+        }
+
         Gorev::create($veri);
+
+        // Panel ana sayfasındaki hızlı ekleme kutusundan gelindiyse oraya dön
+        if (url()->previous() === route('yonetim.panel')) {
+            return back()->with('bilgi', 'Görev eklendi.');
+        }
 
         return redirect()->route('yonetim.yapilacaklar', ['tarih' => $veri['tarih']])->with('bilgi', 'Görev eklendi.');
     }
@@ -124,75 +140,5 @@ class YapilacaklarController extends Controller
         $randevu->save();
 
         return back();
-    }
-
-    private function randevular(Carbon $gun): Collection
-    {
-        return Randevu::aktif()
-            ->whereBetween('baslangic', [$gun, $gun->copy()->endOfDay()])
-            ->get()
-            ->map(fn (Randevu $r) => [
-                'tur'    => 'randevu',
-                'sira'   => 1,
-                'saat'   => $r->baslangic->format('H:i'),
-                'bitis'  => $r->bitis()->format('H:i'),
-                'baslik' => $r->ad_soyad,
-                'alt'    => collect([$r->konu, $r->gorusmeSekliEtiketi(), $r->telefon])->filter()->join(' · '),
-                'etiket' => $r->durum === 'beklemede' ? 'Onay bekliyor' : 'Randevu',
-                'tamam'  => $r->durum === 'tamamlandi',
-                'tamamla' => route('yonetim.randevular.tamamla', $r),
-                'link'   => route('yonetim.randevular.edit', $r),
-                'sil'    => null,
-            ]);
-    }
-
-    private function etkinlikler(Carbon $gun): Collection
-    {
-        return Etkinlik::query()
-            ->where('baslangic', '<=', $gun->copy()->endOfDay())
-            ->where(fn ($q) => $q->where('baslangic', '>=', $gun)
-                ->orWhere(fn ($q) => $q->where('tum_gun', true)->where('bitis', '>=', $gun)))
-            ->get()
-            ->map(fn (Etkinlik $e) => [
-                'tur'    => 'etkinlik tur-'.$e->tur,
-                'sira'   => 0,
-                'saat'   => $e->tum_gun ? null : $e->baslangic->format('H:i'),
-                'bitis'  => $e->tum_gun || ! $e->bitis ? null : $e->bitis->format('H:i'),
-                'baslik' => $e->baslik,
-                'alt'    => collect([$e->yer, $e->dosya_no])->filter()->join(' · '),
-                'etiket' => $e->turEtiketi(),
-                'tamam'  => $e->tamamlandi,
-                'tamamla' => route('yonetim.etkinlikler.tamamla', $e),
-                'link'   => route('yonetim.etkinlikler.edit', $e),
-                'sil'    => null,
-            ]);
-    }
-
-    private function gorevler(Carbon $gun): Collection
-    {
-        return Gorev::whereDate('tarih', $gun)
-            ->whereNull('ust_gorev_id')
-            ->with('altGorevler')
-            ->get()
-            ->map(fn (Gorev $g) => [
-                'tur'    => 'gorev',
-                'sira'   => 2,
-                'saat'   => $g->saatMetni(),
-                'bitis'  => null,
-                'baslik' => $g->baslik,
-                'alt'    => $g->aciklama,
-                'etiket' => 'Görev',
-                'tamam'  => $g->tamamlandiMi(),
-                'tamamla' => route('yonetim.gorevler.tamamla', $g),
-                'link'   => null,
-                'sil'    => route('yonetim.gorevler.destroy', $g),
-                'altEkle' => route('yonetim.gorevler.alt', $g),
-                'altlar' => $g->altGorevler->map(fn (Gorev $a) => [
-                    'baslik'  => $a->baslik,
-                    'tamam'   => $a->tamamlandiMi(),
-                    'tamamla' => route('yonetim.gorevler.tamamla', $a),
-                    'sil'     => route('yonetim.gorevler.destroy', $a),
-                ]),
-            ]);
     }
 }

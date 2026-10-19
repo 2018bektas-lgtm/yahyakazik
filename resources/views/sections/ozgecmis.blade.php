@@ -1,9 +1,15 @@
 {{--
-    Özgeçmiş zaman çizelgesi (config/icerik.php > ozgecmis).
+    Özgeçmiş zaman çizelgesi. Avukat profilinde $kayitlar ile o avukatın
+    özgeçmişi verilir; verilmezse config/icerik.php > ozgecmis kullanılır.
 
     Sol taraftaki dikey çizgi, bölüm görünür alana girdikçe yukarıdan aşağı
     doğru çizilir; maddeler sırayla belirir. Hareket site.js içinde yönetilir.
 --}}
+@php
+    $kayitlar = $kayitlar ?? config('icerik.ozgecmis');
+@endphp
+
+@if ($kayitlar)
 <section class="ozgecmis section-padding" id="ozgecmis">
     <div class="container">
 
@@ -12,7 +18,7 @@
                 <div class="section-subtitle">
                     <div class="icon"><i class="flaticon-courthouse"></i></div> Kısa özgeçmiş
                 </div>
-                <div class="section-title">Kamu Deneyimi <span>ve</span> Akademik Birikim</div>
+                <div class="section-title">{!! $baslikHtml ?? 'Kamu Deneyimi <span>ve</span> Akademik Birikim' !!}</div>
             </div>
         </div>
 
@@ -21,7 +27,7 @@
                 <div class="zaman-cizelgesi">
                     <span class="cizgi" aria-hidden="true"><span class="dolgu"></span></span>
 
-                    @foreach (config('icerik.ozgecmis') as $kayit)
+                    @foreach ($kayitlar as $kayit)
                         <div class="madde">
                             <span class="nokta" aria-hidden="true"></span>
                             <div class="donem">{{ $kayit['donem'] }}</div>
@@ -35,3 +41,4 @@
 
     </div>
 </section>
+@endif

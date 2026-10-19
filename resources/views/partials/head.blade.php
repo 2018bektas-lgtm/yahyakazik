@@ -1,17 +1,62 @@
+{{--
+    Sayfa başlığı ve açıklaması: yönetim panelinde (Ayarlar > SEO) bu sayfa
+    için yazılmış değer varsa o, yoksa sayfanın kendi @section değeri kullanılır.
+--}}
+@php
+    $seo = app(\App\Support\SiteAyarlari::class);
+    $rota = request()->route()?->getName();
+    $siteAdi = $seo->get('seo.site_adi', config('site.unvan'));
+
+    // @section('baslik', '...') değerleri kaçışlı gelir; bir kez çözüp aşağıda yeniden kaçışlıyoruz
+    $sayfaBasligi = $seo->get("sayfa.{$rota}.baslik")
+        ?? html_entity_decode($__env->yieldContent('baslik', $siteAdi), ENT_QUOTES);
+    $sayfaAciklamasi = $seo->get("sayfa.{$rota}.aciklama")
+        ?? html_entity_decode($__env->yieldContent('aciklama', $seo->get('seo.aciklama', config('site.aciklama'))), ENT_QUOTES);
+    $sayfaAciklamasi = trim(preg_replace('/\s+/', ' ', $sayfaAciklamasi));
+
+    $paylasimGorseli = $seo->get('seo.og_gorsel');
+    $analytics = $seo->get('seo.analytics_id');
+@endphp
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('baslik', config('site.unvan')) &mdash; {{ config('site.unvan') }}</title>
-    <meta name="description" content="@yield('aciklama', config('site.aciklama'))">
-    <meta name="robots" content="index, follow">
+    <title>{{ $sayfaBasligi }} &mdash; {{ $siteAdi }}</title>
+    <meta name="description" content="{{ $sayfaAciklamasi }}">
+    @if ($seo->get('seo.anahtar_kelimeler'))
+        <meta name="keywords" content="{{ $seo->get('seo.anahtar_kelimeler') }}">
+    @endif
+    <meta name="robots" content="{{ $seo->acikMi('seo.indeksle') ? 'index, follow' : 'noindex, nofollow' }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
+    @if ($seo->get('seo.google_dogrulama'))
+        <meta name="google-site-verification" content="{{ $seo->get('seo.google_dogrulama') }}">
+    @endif
+    @if ($seo->get('seo.bing_dogrulama'))
+        <meta name="msvalidate.01" content="{{ $seo->get('seo.bing_dogrulama') }}">
+    @endif
+
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="{{ config('site.unvan') }}">
-    <meta property="og:title" content="@yield('baslik', config('site.unvan'))">
-    <meta property="og:description" content="@yield('aciklama', config('site.aciklama'))">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:site_name" content="{{ $siteAdi }}">
+    <meta property="og:title" content="{{ $sayfaBasligi }}">
+    <meta property="og:description" content="{{ $sayfaAciklamasi }}">
     <meta property="og:url" content="{{ url()->current() }}">
+    @if ($paylasimGorseli)
+        <meta property="og:image" content="{{ asset($paylasimGorseli) }}">
+        <meta name="twitter:card" content="summary_large_image">
+    @endif
+
+    @if ($analytics)
+        {{-- Google Analytics (ölçüm kimliği SEO ayarlarından) --}}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $analytics }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', @json($analytics));
+        </script>
+    @endif
 
     <link rel="icon" href="{{ asset('frontend/img/favicon.svg') }}" type="image/svg+xml">
 
